@@ -1,7 +1,7 @@
-# pip install pywin32
+# first install a module pywin32: pip install pywin32
 from win32com.client import Dispatch, GetActiveObject, gencache
 
-# Get Inventor Application
+# get Inventor Application
 try:
     invApp = GetActiveObject('Inventor.Application')
 except:
@@ -13,21 +13,21 @@ constants = mod.constants
 invApp = mod.Application(invApp)
 invApp.SilentOperation = True
 
-# Create a new part
+# create a new part
 part_template = "C:/Users/Public/Documents/Autodesk/Inventor 2023/Templates/ru-RU/Standard.ipt"
 invDoc = invApp.Documents.Add(constants.kPartDocumentObject, part_template, True)
 
-# Cast this doc to a PartDocument, so we can use its structure
+# cast this doc to a PartDocument, so we can use its structure
 invPartDoc = mod.PartDocument(invDoc)
 compdef = invPartDoc.ComponentDefinition
 
-# creating a sketch
+# create a sketch
 sketch = compdef.Sketches.Add(compdef.WorkPlanes.Item(3))
 
-# add lines into a sketch
+# add rectangle into a sketch
+# coordinates will be increased tenfold (because cm is internal Inventor API units)
 tg = invApp.TransientGeometry
 
-# coordinates will be increased tenfold (because cm is internal Inventor API units)
 first_point = tg.CreatePoint2d(0, 0)
 second_point = tg.CreatePoint2d(100, 50)
 sketch.SketchLines.AddAsTwoPointCenteredRectangle(first_point, second_point)
